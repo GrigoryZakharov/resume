@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { FaGithub, FaLinkedin, FaEnvelope, FaTelegramPlane, FaDownload } from 'react-icons/fa'
 import myPhoto from './assets/My_pic.jpg';
@@ -10,35 +8,63 @@ import weather_hub from "./assets/weather-hub.png"
 import USU from "./assets/USU-logo.jpeg"
 import Blog_API from "./assets/Blog-API.png"
 import resumeFile from './assets/1.docx.pdf'
+import React, { useRef, useEffect } from "react";
 
+function SharpImage({ src, size, className, alt }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = src;
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = size * dpr;
+      canvas.height = size * dpr;
+      canvas.style.width = `${size}px`;
+      canvas.style.height = `${size}px`;
+
+      ctx.scale(dpr, dpr);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      // object-fit: cover
+      const scale = Math.max(size / img.width, size / img.height);
+      const x = (size - img.width * scale) / 2;
+      const y = (size - img.height * scale) / 2;
+
+      ctx.clearRect(0, 0, size, size);
+      ctx.drawImage(img, 0, 0, img.width, img.height, x, y, img.width * scale, img.height * scale);
+    };
+  }, [src, size]);
+
+  return <canvas ref={canvasRef} className={className} aria-label={alt} />;
+}
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
 
-
   return (
     <div className="flex h-screen">
-      <aside class="pl-20 w-1/3 bg-[#343a40] text-white p-6 flex flex-col items-left">
-        <div
-          style={{ width: '300px', height: '300px', overflow: 'hidden', borderRadius: '50%' }}
-        >
-          <img
-            src={myPhoto}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            alt="Мое фото"
-          />
+      <aside className="pl-20 w-1/3 bg-[#343a40] text-white p-6 flex flex-col items-left">
+        <div style={{ width: 300, height: 300, borderRadius: "50%", overflow: "hidden" }}>
+          <SharpImage src={myPhoto} size={300} className="rounded-full" alt="Мое фото" />
         </div>
-        <h2 class="text-4xl font-bold mb-2">Григорий Захаров</h2>
-        <p class="mb-4 text-gray-400">FullStack Developer</p>
-        <div className="flex items-center spece-x-4 mb-4">
+        <h2 className="text-4xl font-bold mb-2">Григорий Захаров</h2>
+        <p className="mb-4 text-gray-400">FullStack Developer</p>
+        <div className="flex items-center space-x-4 mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
           </svg>
           <p className="text-gray-400">Ульяновск, Россия 🇷🇺</p>
         </div>
-        <div><p class = "pb-4">Я не fullstack, я fullгалактика: фронт, бэк и звёзды кода</p></div>
-        <div class="flex space-x-5">
+        <p className="pb-4">Я не fullstack, я fullгалактика: фронт, бэк и звёзды кода</p>
+        <div className="flex space-x-5">
           <a
             href={resumeFile}
             download
@@ -63,10 +89,8 @@ export default function App() {
           </a>
         </div>
       </aside>
-      <main class="w-2/3 bg-[#343a40] p-6 overflow-y-auto text-white ">
-      <section class="mb-8">
-        </section>
-        <section class="mb-8">
+      <main className="w-2/3 bg-[#343a40] p-6 overflow-y-auto text-white">
+        <section className="mb-8">
           <h2 className="text-2xl font-bold text-white-500 mb-4 text-center">Stats</h2>
           <div className="max-w-md mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-6">
             <table className="w-full table-auto text-left">
@@ -99,16 +123,11 @@ export default function App() {
                   <td className="py-2 font-semibold text-white-500">Любимые фреймворки</td>
                   <td className="py-2 text-gray-300">React, Node, FastAPI</td>
                 </tr>
-                <tr>
-                  <td className="py-2 font-semibold text-white-500">Faciet level</td>
-                  <td className="py-2 text-gray-300">
-                    <img src={faciet} alt="Фейсит" className="w-40 h-16 inline-block" />
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
         </section>
+
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4 text-white-500 text-center">Skills</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -133,23 +152,33 @@ export default function App() {
           </div>
         </section>
 
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-2 text-center">Опыт работы</h2>
-          <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-2 text-center">Опыт работы</h2>
+          <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <img src={USU} alt="Company Logo" className="w-16 h-16 rounded-md object-cover" />
-
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                }}
+              >
+                <SharpImage
+                  src={USU}
+                  size={64}
+                  className="object-contain"
+                  alt="USU Logo"
+                />
+              </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University</h3>
                 <p className="text-gray-400">Python Developer Стажировка</p>
                 <p className="text-gray-400">Июнь 2025 - Июль 2025</p>
-                
                 <button onClick={() => setIsOpen(!isOpen)} className="flex items-center bg-white-500 text-white px-4 py-1.5 rounded-md 
-             hover:bg-red-600 transform hover:scale-105 
-             transition duration-500 ease-in-out space-x-2 mt-4">
+             hover:bg-red-600 transform hover:scale-105 transition duration-500 ease-in-out space-x-2 mt-4">
                   Развернуть полностью
                 </button>
-
                 {isOpen && (
                   <div className="mt-4 text-gray-300">
                     <ul className="list-disc list-inside space-y-2">
@@ -164,75 +193,134 @@ export default function App() {
             </div>
           </div>
         </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-2 text-center">Образование</h2>
-          <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-2 text-center">Образование</h2>
+          <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <img src={USU} alt="Company Logo" className="w-16 h-16 rounded-md object-cover" />
-
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                }}
+              >
+                <SharpImage
+                  src={USU}
+                  size={64}
+                  className="object-contain"
+                  alt="USU Logo"
+                />
+              </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University - Бакалавр</h3>
                 <p className="text-gray-400">Математическое обеспечение и администрирование информационных систем</p>
-                <p className="text-gray-400">Сенябрь 2024 - Июль 2028</p>
+                <p className="text-gray-400">Сентябрь 2024 - Июль 2028</p>
               </div>
             </div>
           </div>
         </section>
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-2 text-center">Проекты</h2>
-          <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
-            <div className="flex items-start space-x-4">
-              <img src={weather_hub} alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
 
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-white-500 pb-5">WeatherHub API</h3>
-                <li className="pb-5">Создал масштабируемый API для получения и синхронизации погодных данных из внешних источников.</li> 
-                <li className="pb-5">Настроил Celery и Redis для фоновых задач и улучшения производительности запросов.</li>
-                <li className="pb-5">Реализовал эндпоинты для запросов по городам с сохранением данных в PostgreSQL.
-Подготовил Docker и .env-конфигурации для удобного деплоя и тестирования.</li>
-                <p className="pb-5">Python, FastAPI, PostgreSQL, SQLAlchemy, Redis, Celery</p>
-                <a href="https://github.com/GrigoryZakharov/weatherhub" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300">
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-2 text-center">Проекты</h2>
+
+          <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
+            <div className="flex items-start space-x-6">
+              <div
+                style={{
+                  width: "300px",      
+                  height: "300px",    
+                  flexShrink: 0,       
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                }}
+              >
+                <SharpImage
+                  src={weather_hub}
+                  size={300}
+                  className="w-full h-full"
+                  alt="WeatherHub Project"
+                />
+              </div>
+
+              <div className="flex-1 pl-2">
+                <h3 className="text-xl font-bold text-white pb-5">WeatherHub API</h3>
+                <li className="pb-3">Создал масштабируемый API для получения и синхронизации погодных данных из внешних источников.</li>
+                <li className="pb-3">Настроил Celery и Redis для фоновых задач и улучшения производительности запросов.</li>
+                <li className="pb-3">Реализовал эндпоинты для запросов по городам с сохранением данных в PostgreSQL. Подготовил Docker и .env-конфигурации для удобного деплоя и тестирования.</li>
+                <p className="pb-3 text-gray-300">Python, FastAPI, PostgreSQL, SQLAlchemy, Redis, Celery</p>
+                <a
+                  href="https://github.com/GrigoryZakharov/weatherhub"
+                  className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300"
+                >
                   <FaGithub />
                 </a>
               </div>
             </div>
           </div>
-          <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
+
+
+          <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <img src={Blog_API} alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
-              <div className="flex-1">
+              <div
+                style={{
+                  width: "300px",      
+                  height: "300px",    
+                  flexShrink: 0,       
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                }}
+              >
+                <SharpImage
+                  src={Blog_API}
+                  size={300}
+                  className="w-full h-full"
+                  alt="Blog API Project"
+                />
+              </div>
+              <div className="flex-1 pl-5">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Blog Platform</h3>
                 <li className="pb-5">Реализовал полноценный fullstack блог с аутентификацией и авторизацией через JWT.</li> 
                 <li className="pb-5">CRUD операции для постов и комментариев, функционал лайков/дизлайков.</li>
                 <li className="pb-5">Настроил Alembic для миграций базы данных и Docker для backend, frontend и БД.</li>
                 <li className="pb-5">SPA на React с React Router, интеграция с FastAPI через REST.</li>
                 <p className="pb-5">Python, FastAPI, React, PostgreSQL, SQLAlchemy, JWT, Docker</p>
-                <a href="https://github.com/GrigoryZakharov/Blog_API" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300">
-                  <FaGithub />
-                </a>
+                <a href="https://github.com/GrigoryZakharov/Blog_API" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300"><FaGithub /></a>
               </div>
             </div>
           </div>
-          <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
-            <div className="flex items-start space-x-4">
 
-              <img src={todoApi} alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
-              <div className="flex-1">
+          <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
+            <div className="flex items-start space-x-4">
+              <div
+                style={{
+                  width: "300px",      
+                  height: "300px",    
+                  flexShrink: 0,       
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                }}
+              >
+                <SharpImage
+                  src={todoApi}
+                  size={300}
+                  className="w-full h-full"
+                  alt="todo API Project"
+                />
+              </div>
+              <div className="flex-1 pl-5">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Todo APP</h3>
-                <li className="pb-5">полноценное full-stack приложение для управления задачами.</li> 
+                <li className="pb-5">Полноценное full-stack приложение для управления задачами.</li> 
                 <li className="pb-5">Реализованы создание, чтение, обновление и удаление задач с фильтрацией и пагинацией.</li>
                 <li className="pb-5">Frontend на React с TailwindCSS, backend на FastAPI с PostgreSQL и SQLAlchemy.</li>
                 <li className="pb-5">Полностью dockerized для лёгкого развёртывания и тестирования через Pytest.</li>
                 <p className="pb-5">Python 3.11, FastAPI, SQLAlchemy, Pydantic, PostgreSQL, React 18, TailwindCSS, Docker, Docker Compose, Pytest</p>
-                <a href="https://github.com/GrigoryZakharov/todo_api" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300">
-                  <FaGithub />
-                </a>
+                <a href="https://github.com/GrigoryZakharov/todo_api" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300"><FaGithub /></a>
               </div>
             </div>
           </div>
         </section>
       </main>
     </div>
-  )
+  );
 }
