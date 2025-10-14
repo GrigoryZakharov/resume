@@ -3,6 +3,13 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { FaGithub, FaLinkedin, FaEnvelope, FaTelegramPlane, FaDownload } from 'react-icons/fa'
+import myPhoto from './assets/My_pic.jpg';
+import faciet from './assets/faciet.png';
+import todoApi from './assets/todo-Api.png';
+import weather_hub from "./assets/weather-hub.png"
+import USU from "./assets/USU-logo.jpeg"
+import Blog_API from "./assets/Blog-API.png"
+import resumeFile from './assets/1.docx.pdf'
 
 
 export default function App() {
@@ -16,7 +23,7 @@ export default function App() {
           style={{ width: '300px', height: '300px', overflow: 'hidden', borderRadius: '50%' }}
         >
           <img
-            src="/My_pic.jpg"
+            src={myPhoto}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             alt="Мое фото"
           />
@@ -33,8 +40,8 @@ export default function App() {
         <div><p class = "pb-4">Я не fullstack, я fullгалактика: фронт, бэк и звёзды кода</p></div>
         <div class="flex space-x-5">
           <a
-            href="/resume.pdf"
-            download="Grigory_Zakharov_Resume.pdf"
+            href={resumeFile}
+            download
             className="flex items-center bg-white-500 text-white px-4 py-1.5 rounded-md 
              hover:bg-red-600 transform hover:scale-105 
              transition duration-500 ease-in-out space-x-2"
@@ -95,7 +102,7 @@ export default function App() {
                 <tr>
                   <td className="py-2 font-semibold text-white-500">Faciet level</td>
                   <td className="py-2 text-gray-300">
-                    <img src="/faciet.png" alt="Фейсит" className="w-40 h-16 inline-block" />
+                    <img src={faciet} alt="Фейсит" className="w-40 h-16 inline-block" />
                   </td>
                 </tr>
               </tbody>
@@ -130,7 +137,7 @@ export default function App() {
           <h2 class="text-2xl font-bold mb-2 text-center">Опыт работы</h2>
           <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <img src="/USU-logo.jpeg" alt="Company Logo" className="w-16 h-16 rounded-md object-cover" />
+              <img src={USU} alt="Company Logo" className="w-16 h-16 rounded-md object-cover" />
 
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University</h3>
@@ -162,7 +169,7 @@ export default function App() {
           <h2 class="text-2xl font-bold mb-2 text-center">Образование</h2>
           <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <img src="/USU-logo.jpeg" alt="Company Logo" className="w-16 h-16 rounded-md object-cover" />
+              <img src={USU} alt="Company Logo" className="w-16 h-16 rounded-md object-cover" />
 
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University - Бакалавр</h3>
@@ -176,7 +183,7 @@ export default function App() {
           <h2 class="text-2xl font-bold mb-2 text-center">Проекты</h2>
           <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <img src="/weather-hub.png" alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
+              <img src={weather_hub} alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
 
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500 pb-5">WeatherHub API</h3>
@@ -193,7 +200,7 @@ export default function App() {
           </div>
           <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <img src="/Blog-API.png" alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
+              <img src={Blog_API} alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Blog Platform</h3>
                 <li className="pb-5">Реализовал полноценный fullstack блог с аутентификацией и авторизацией через JWT.</li> 
@@ -210,7 +217,7 @@ export default function App() {
           <div className=" mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
 
-              <img src="/todo-Api.png" alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
+              <img src={todoApi} alt="Company Logo" className="w-72 h-72 rounded-md object-cover" />
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Todo APP</h3>
                 <li className="pb-5">полноценное full-stack приложение для управления задачами.</li> 
