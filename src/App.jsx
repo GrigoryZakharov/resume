@@ -9,40 +9,54 @@ import USU from "./assets/USU-logo.jpeg"
 import Blog_API from "./assets/Blog-API.png"
 import resumeFile from './assets/1.docx.pdf'
 import React, { useRef, useEffect } from "react";
+import Pica from "pica";
 
-function SharpImage({ src, size, className, alt }) {
-  const canvasRef = useRef(null);
+function SharpImage({ src, width, height, alt, className }) {
+  const [resizedSrc, setResizedSrc] = useState(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-
     const img = new Image();
     img.src = src;
     img.crossOrigin = "anonymous";
-    img.onload = () => {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = size * dpr;
-      canvas.height = size * dpr;
-      canvas.style.width = `${size}px`;
-      canvas.style.height = `${size}px`;
+    img.onload = async () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width * 2; 
+      canvas.height = height * 2;
 
-      ctx.scale(dpr, dpr);
+      const ctx = canvas.getContext("2d");
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
 
-      // object-fit: cover
-      const scale = Math.max(size / img.width, size / img.height);
-      const x = (size - img.width * scale) / 2;
-      const y = (size - img.height * scale) / 2;
+      const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+      const x = (canvas.width - img.width * scale) / 2;
+      const y = (canvas.height - img.height * scale) / 2;
 
-      ctx.clearRect(0, 0, size, size);
-      ctx.drawImage(img, 0, 0, img.width, img.height, x, y, img.width * scale, img.height * scale);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        img.width,
+        img.height,
+        x,
+        y,
+        img.width * scale,
+        img.height * scale
+      );
+
+      setResizedSrc(canvas.toDataURL("image/png"));
     };
-  }, [src, size]);
-
-  return <canvas ref={canvasRef} className={className} aria-label={alt} />;
+  }, [src, width, height]);
+  return (
+    <img
+      src={resizedSrc || src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+      style={{ objectFit: "cover", display: "block" }}
+    />
+  );
 }
 
 export default function App() {
@@ -51,8 +65,24 @@ export default function App() {
   return (
     <div className="flex h-screen">
       <aside className="pl-20 w-1/3 bg-[#343a40] text-white p-6 flex flex-col items-left">
-        <div style={{ width: 300, height: 300, borderRadius: "50%", overflow: "hidden" }}>
-          <SharpImage src={myPhoto} size={300} className="rounded-full" alt="Мое фото" />
+        <div
+          style={{
+            width: 300,
+            height: 300,
+            borderRadius: "50%",
+            overflow: "hidden",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <SharpImage
+            src={myPhoto}
+            width={300}
+            height={300} 
+            className="block"
+            alt="Мое фото"
+          />
         </div>
         <h2 className="text-4xl font-bold mb-2">Григорий Захаров</h2>
         <p className="mb-4 text-gray-400">FullStack Developer</p>
@@ -156,20 +186,8 @@ export default function App() {
           <h2 className="text-2xl font-bold mb-2 text-center">Опыт работы</h2>
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                }}
-              >
-                <SharpImage
-                  src={USU}
-                  size={64}
-                  className="object-contain"
-                  alt="USU Logo"
-                />
+              <div style={{ width: 64, height: 64, borderRadius: "8px", overflow: "hidden" }}>
+                <SharpImage src={USU} width={64} height={64} alt="USU Logo" />
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University</h3>
@@ -197,20 +215,8 @@ export default function App() {
           <h2 className="text-2xl font-bold mb-2 text-center">Образование</h2>
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                }}
-              >
-                <SharpImage
-                  src={USU}
-                  size={64}
-                  className="object-contain"
-                  alt="USU Logo"
-                />
+              <div style={{ width: 64, height: 64, borderRadius: "8px", overflow: "hidden" }}>
+                <SharpImage src={USU} width={64} height={64} alt="USU Logo" />
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University - Бакалавр</h3>
@@ -226,21 +232,8 @@ export default function App() {
 
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-6">
-              <div
-                style={{
-                  width: "300px",      
-                  height: "300px",    
-                  flexShrink: 0,       
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                }}
-              >
-                <SharpImage
-                  src={weather_hub}
-                  size={300}
-                  className="w-full h-full"
-                  alt="WeatherHub Project"
-                />
+              <div style={{ width: 200, height: 300, borderRadius: "12px", overflow: "hidden" }}>
+                <SharpImage src={weather_hub} width={200} height={300} alt="WeatherHub Project" />
               </div>
 
               <div className="flex-1 pl-2">
@@ -262,21 +255,8 @@ export default function App() {
 
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <div
-                style={{
-                  width: "300px",      
-                  height: "300px",    
-                  flexShrink: 0,       
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                }}
-              >
-                <SharpImage
-                  src={Blog_API}
-                  size={300}
-                  className="w-full h-full"
-                  alt="Blog API Project"
-                />
+              <div style={{ width: 200, height: 300, borderRadius: "12px", overflow: "hidden" }}>
+                <SharpImage src={Blog_API} width={200} height={300} alt="WeatherHub Project" />
               </div>
               <div className="flex-1 pl-5">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Blog Platform</h3>
@@ -292,21 +272,8 @@ export default function App() {
 
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
-              <div
-                style={{
-                  width: "300px",      
-                  height: "300px",    
-                  flexShrink: 0,       
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                }}
-              >
-                <SharpImage
-                  src={todoApi}
-                  size={300}
-                  className="w-full h-full"
-                  alt="todo API Project"
-                />
+              <div style={{ width: 200, height: 300, borderRadius: "12px", overflow: "hidden" }}>
+                <SharpImage src={todoApi} width={200} height={300} alt="WeatherHub Project" />
               </div>
               <div className="flex-1 pl-5">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Todo APP</h3>
