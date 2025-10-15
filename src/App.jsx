@@ -178,8 +178,8 @@ export default function App() {
                   <td className="py-2 text-gray-300">3+</td>
                 </tr>
                 <tr className="border-b border-gray-700">
-                  <td className="py-2 font-semibold text-white-500">Технологий</td>
-                  <td className="py-2 text-gray-300">5+</td>
+                  <td className="py-2 font-semibold text-white-500">Английский язык</td>
+                  <td className="py-2 text-gray-300">C1</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2 font-semibold text-white-500">Чашки кофе/день</td>
