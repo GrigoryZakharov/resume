@@ -222,6 +222,38 @@ export default function App() {
           </div>
         </section>
 
+
+        {isMobile? (
+          <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-2 text-center">Опыт работы</h2>
+          <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
+            <div className="flex items-start space-x-4">
+              <div style={{ width: 64, height: 64, borderRadius: "8px", overflow: "hidden" }}>
+                <SharpImage src={USU} width={64} height={64} alt="USU Logo" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University</h3>
+                <p className="text-gray-400">Python Developer Стажировка</p>
+                <p className="text-gray-400">Июнь 2025 - Июль 2025</p>
+                <button onClick={() => setIsOpen(!isOpen)} className="flex items-center bg-white-500 text-white px-4 py-1.5 rounded-md 
+             hover:bg-red-600 transform hover:scale-105 transition duration-300 ease-in-out space-x-2 mt-4">
+                  Развернуть полностью
+                </button>
+                {isOpen && (
+                  <div className="mt-4 text-gray-300">
+                    <ul className="list-disc list-inside space-y-2">
+                      <li>Разработка и поддержка веб-приложений с использованием Python и Django.</li>
+                      <li>Создание RESTful API для интеграции с фронтенд-приложениями.</li>
+                      <li>Оптимизация производительности приложений и базы данных.</li>
+                      <li>Работа в команде с использованием Git для контроля версий.</li>
+                      <li>Участие в планировании и оценке задач в рамках Agile-методологии.</li>
+                    </ul>
+                  </div>)}
+              </div>
+            </div>
+          </div>
+        </section>
+        ) : (
         <section data-aos="fade-left" data-aos-delay="400" className="mb-8">
           <h2 className="text-2xl font-bold mb-2 text-center">Опыт работы</h2>
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
@@ -251,6 +283,7 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-2 text-center">Образование</h2>
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
