@@ -170,7 +170,7 @@ export default function App() {
                   <td className="py-2 text-gray-300">19</td>
                 </tr>
                 <tr className="border-b border-gray-700">
-                  <td className="py-2 font-semibold text-white-500">Года опыта</td>
+                  <td className="py-2 font-semibold text-white-500">Годы опыта</td>
                   <td className="py-2 text-gray-300">1+</td>
                 </tr>
                 <tr className="border-b border-gray-700">
