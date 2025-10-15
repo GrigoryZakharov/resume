@@ -265,7 +265,7 @@ export default function App() {
                 <h3 className="text-xl font-bold text-white-500">Ulyanovsk State Technical University</h3>
                 <p className="text-gray-400">Python Developer Стажировка</p>
                 <p className="text-gray-400">Июнь 2025 - Июль 2025</p>
-                <button onClick={() => setIsOpen(!isOpen)} className="flex items-center bg-white-500 text-white px-4 py-1.5 rounded-md 
+                <button onClick={() => setIsOpen(!isOpen)} className="flex items-center bg-gray-500 text-white px-4 py-1.5 rounded-md 
              hover:bg-red-600 transform hover:scale-105 transition duration-300 ease-in-out space-x-2 mt-4">
                   Развернуть полностью
                 </button>
