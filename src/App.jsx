@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { use, useState } from 'react'
 import './App.css'
 import { FaGithub, FaLinkedin, FaEnvelope, FaTelegramPlane, FaDownload } from 'react-icons/fa'
 import myPhoto from './assets/My_pic.jpg';
@@ -10,6 +10,10 @@ import Blog_API from "./assets/Blog-API.png"
 import resumeFile from './assets/1.docx.pdf'
 import React, { useRef, useEffect } from "react";
 import Pica from "pica";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useMediaQuery } from 'react-responsive';
+
 
 function SharpImage({ src, width, height, alt, className }) {
   const [resizedSrc, setResizedSrc] = useState(null);
@@ -61,68 +65,104 @@ function SharpImage({ src, width, height, alt, className }) {
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoaded] = useState(true);
+
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
+   useEffect(() => {
+    const timer = setTimeout(() => setLoaded(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,  
+      mirror: false,
+      offset: 200,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        AOS.refreshHard();
+      }, 50);
+    }
+  }, [loading]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[#343a40]">
+        <div className="text-white text-2xl">Загрузка...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-screen">
-      <aside className="pl-20 w-1/3 bg-[#343a40] text-white p-6 flex flex-col items-left">
-        <div
-          style={{
-            width: 300,
-            height: 300,
-            borderRadius: "50%",
-            overflow: "hidden",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <SharpImage
-            src={myPhoto}
-            width={300}
-            height={300} 
-            className="block"
-            alt="Мое фото"
-          />
-        </div>
-        <h2 className="text-4xl font-bold mb-2">Григорий Захаров</h2>
-        <p className="mb-4 text-gray-400">FullStack Developer</p>
-        <div className="flex items-center space-x-4 mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-          </svg>
-          <p className="text-gray-400">Ульяновск, Россия 🇷🇺</p>
-        </div>
-        <p className="pb-4">Я не fullstack, я fullгалактика: фронт, бэк и звёзды кода</p>
-        <div className="flex space-x-5">
-          <a
-            href={resumeFile}
-            download
-            className="flex items-center bg-white-500 text-white px-4 py-1.5 rounded-md 
-             hover:bg-red-600 transform hover:scale-105 
-             transition duration-500 ease-in-out space-x-2"
+    <div className="md:flex md:h-screen">
+      <aside className="md:pl-20 md:w-1/3 bg-[#343a40] text-white p-6 flex flex-col items-center ">
+        <div className="text-center md:text-left" data-aos="fade-right" data-aos-delay="0">
+          <div 
+            style={{
+              width: 300,
+              height: 300,
+              borderRadius: "50%",
+              overflow: "hidden",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: isMobile ? "0 auto 20px" : "0 0 20px 0"
+            }}
           >
-            <FaDownload className="w-4 h-4" />
-            <span className="text-sm">Скачать резюме</span>
-          </a>
-          <a href="mailto:zakharov9933@gmail.com" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300">
-            <FaEnvelope />
-          </a>
-          <a href="http://github.com/GrigoryZakharov" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300">
-            <FaGithub />
-          </a>
-          <a href="https://www.linkedin.com/in/grigory-zakharov-577561389/" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300">
-            <FaLinkedin />
-          </a>
-          <a href="https://t.me/ILoveTankiOnline" target="_blank" className="pt-1 text-2xl hover:text-red-500 transition duration-300 transform hover:scale-125">
-            <FaTelegramPlane />
-          </a>
+            <SharpImage
+              src={myPhoto}
+              width={300}
+              height={300} 
+              className="block"
+              alt="Мое фото"
+            />
+          </div>
+          <h2 className="text-4xl font-bold mb-2">Григорий Захаров</h2>
+          <p className="mb-4 text-gray-400">FullStack Developer</p>
+          <div className="flex justify-center md:justify-start space-x-4 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+            <p className="text-gray-400">Ульяновск, Россия 🇷🇺</p>
+          </div>
+          <p className="pb-4 text-center">Я не fullstack, я fullгалактика: фронт, бэк и звёзды кода</p>
+          <div className="flex space-x-5">
+            <a
+              href={resumeFile}
+              download
+              className="flex items-center bg-white-500 text-white px-4 py-1.5 rounded-md 
+              hover:bg-red-600 transform hover:scale-105 
+              transition duration-200 ease-in-out space-x-2"
+            >
+              <FaDownload className="w-4 h-4" />
+              <span className="text-sm">Скачать резюме</span>
+            </a>
+            <a href="mailto:zakharov9933@gmail.com" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-200">
+              <FaEnvelope />
+            </a>
+            <a href="http://github.com/GrigoryZakharov" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-200">
+              <FaGithub />
+            </a>
+            <a href="https://www.linkedin.com/in/grigory-zakharov-577561389/" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-200">
+              <FaLinkedin />
+            </a>
+            <a href="https://t.me/ILoveTankiOnline" target="_blank" className="pt-1 text-2xl hover:text-red-500 transition duration-200 transform hover:scale-125">
+              <FaTelegramPlane />
+            </a>
+          </div>
         </div>
       </aside>
-      <main className="w-2/3 bg-[#343a40] p-6 overflow-y-auto text-white">
-        <section className="mb-8">
+      <main className="md:w-2/3 bg-[#343a40] p-6 overflow-y-auto text-white ">
+        <section data-aos="fade-left"  data-aos-delay="300" className="mb-8">
           <h2 className="text-2xl font-bold text-white-500 mb-4 text-center">Stats</h2>
-          <div className="max-w-md mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-6">
+          <div className=" transform hover:scale-105 transition duration-300 max-w-md mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-6">
             <table className="w-full table-auto text-left">
               <tbody>
                 <tr className="border-b border-gray-700">
@@ -158,31 +198,31 @@ export default function App() {
           </div>
         </section>
 
-        <section className="mb-8">
+        <section data-aos="fade-left" data-aos-delay="350" className="mb-8">
           <h2 className="text-2xl font-bold mb-4 text-white-500 text-center">Skills</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-red-800 transition duration-300">
+            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-red-800 transition duration-300 transform hover:scale-105">
               <h3 className="font-semibold mb-2 text-red-500 group-hover:text-white transition-colors duration-300">
                 Languages & Frameworks
               </h3>
-              <p className="text-white-500 group-hover:text-white transition-colors duration-300">Python, FastAPI, SQLAlchemy, Django, C++</p>
+              <p className="text-white-500 group-hover:text-white transition-colors duration-300 ">Python, FastAPI, SQLAlchemy, Django, C++</p>
             </div>
-            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-green-800 transition duration-300">
+            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-green-800 transition duration-300 transform hover:scale-105">
               <h3 className="font-semibold mb-2 text-green-500 group-hover:text-white transition-colors duration-300">Databases</h3>
               <p className="text-white-500 group-hover:text-white transition-colors duration-300">PostgreSQL, MySQL, SQLite</p>
             </div>
-            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-blue-800 transition duration-300">
+            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-blue-800 transition duration-300 transform hover:scale-105">
               <h3 className="font-semibold mb-2 text-blue-500 group-hover:text-white transition-colors duration-300">Tools & Technologies</h3>
               <p className="text-white-500 group-hover:text-white transition-colors duration-300">Git, Docker, Redis, Celery, AsyncIO, Unit Testing</p>
             </div>
-            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-yellow-800 transition duration-300">
+            <div className="bg-[#495057] text-white-500 p-4 rounded-lg shadow-2xl group hover:bg-yellow-800 transition duration-300 transform hover:scale-105">
               <h3 className="font-semibold mb-2 text-yellow-500 group-hover:text-white transition-colors duration-300">Other</h3>
               <p className="text-white-500 group-hover:text-white transition-colors duration-300">REST API Design, JWT Authentication, CI/CD (basic), SPA, React Router</p>
             </div>
           </div>
         </section>
 
-        <section className="mb-8">
+        <section data-aos="fade-left" data-aos-delay="400" className="mb-8">
           <h2 className="text-2xl font-bold mb-2 text-center">Опыт работы</h2>
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
             <div className="flex items-start space-x-4">
@@ -194,7 +234,7 @@ export default function App() {
                 <p className="text-gray-400">Python Developer Стажировка</p>
                 <p className="text-gray-400">Июнь 2025 - Июль 2025</p>
                 <button onClick={() => setIsOpen(!isOpen)} className="flex items-center bg-white-500 text-white px-4 py-1.5 rounded-md 
-             hover:bg-red-600 transform hover:scale-105 transition duration-500 ease-in-out space-x-2 mt-4">
+             hover:bg-red-600 transform hover:scale-105 transition duration-300 ease-in-out space-x-2 mt-4">
                   Развернуть полностью
                 </button>
                 {isOpen && (
@@ -231,9 +271,9 @@ export default function App() {
           <h2 className="text-2xl font-bold mb-2 text-center">Проекты</h2>
 
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
-            <div className="flex items-start space-x-6">
-              <div style={{ width: 200, height: 300, borderRadius: "12px", overflow: "hidden" }}>
-                <SharpImage src={weather_hub} width={200} height={300} alt="WeatherHub Project" />
+            <div className="flex flex-col md:flex-row  items-start space-x-6">
+              <div style={{ width: isMobile ? 300 : 200, height: 300, borderRadius: "12px", overflow: "hidden", margin: isMobile ? "0 auto 20px" : "0 0 20px 0" }}>
+                <SharpImage src={weather_hub} width={isMobile ? 300 : 200} height={300} alt="WeatherHub Project" />
               </div>
 
               <div className="flex-1 pl-2">
@@ -244,7 +284,7 @@ export default function App() {
                 <p className="pb-3 text-gray-300">Python, FastAPI, PostgreSQL, SQLAlchemy, Redis, Celery</p>
                 <a
                   href="https://github.com/GrigoryZakharov/weatherhub"
-                  className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300"
+                  className="pt-1 text-4xl hover:text-red-500 transform hover:scale-125 transition duration-300 inline-block"
                 >
                   <FaGithub />
                 </a>
@@ -254,9 +294,9 @@ export default function App() {
 
 
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
-            <div className="flex items-start space-x-4">
-              <div style={{ width: 200, height: 300, borderRadius: "12px", overflow: "hidden" }}>
-                <SharpImage src={Blog_API} width={200} height={300} alt="WeatherHub Project" />
+            <div className="flex flex-col md:flex-row items-start space-x-4">
+              <div style={{ width: isMobile ? 300 : 200, height: 300, borderRadius: "12px", overflow: "hidden", margin: isMobile ? "0 auto 20px" : "0 0 20px 0" }}>
+                <SharpImage src={Blog_API} width={isMobile ? 300 : 200} height={300} alt="WeatherHub Project" />
               </div>
               <div className="flex-1 pl-5">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Blog Platform</h3>
@@ -265,15 +305,18 @@ export default function App() {
                 <li className="pb-5">Настроил Alembic для миграций базы данных и Docker для backend, frontend и БД.</li>
                 <li className="pb-5">SPA на React с React Router, интеграция с FastAPI через REST.</li>
                 <p className="pb-5">Python, FastAPI, React, PostgreSQL, SQLAlchemy, JWT, Docker</p>
-                <a href="https://github.com/GrigoryZakharov/Blog_API" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300"><FaGithub /></a>
+                <a href="https://github.com/GrigoryZakharov/Blog_API" 
+                className="pt-1 text-4xl hover:text-red-500 transform hover:scale-125 transition duration-300 inline-block">
+                  <FaGithub />
+                </a>
               </div>
             </div>
           </div>
 
           <div className="mx-auto bg-[#495057] text-white rounded-lg shadow-lg p-4 mb-6">
-            <div className="flex items-start space-x-4">
-              <div style={{ width: 200, height: 300, borderRadius: "12px", overflow: "hidden" }}>
-                <SharpImage src={todoApi} width={200} height={300} alt="WeatherHub Project" />
+            <div className="flex flex-col md:flex-row items-start space-x-4">
+              <div style={{ width: isMobile ? 300 : 200, height: 300, borderRadius: "12px", overflow: "hidden", margin: isMobile ? "0 auto 20px" : "0 0 20px 0" }}>
+                <SharpImage src={todoApi} width={isMobile ? 300 : 200} height={300} alt="WeatherHub Project" />
               </div>
               <div className="flex-1 pl-5">
                 <h3 className="text-xl font-bold text-white-500 pb-5">Todo APP</h3>
@@ -282,7 +325,9 @@ export default function App() {
                 <li className="pb-5">Frontend на React с TailwindCSS, backend на FastAPI с PostgreSQL и SQLAlchemy.</li>
                 <li className="pb-5">Полностью dockerized для лёгкого развёртывания и тестирования через Pytest.</li>
                 <p className="pb-5">Python 3.11, FastAPI, SQLAlchemy, Pydantic, PostgreSQL, React 18, TailwindCSS, Docker, Docker Compose, Pytest</p>
-                <a href="https://github.com/GrigoryZakharov/todo_api" className="pt-1 text-2xl hover:text-red-500 transform hover:scale-125 transition duration-300"><FaGithub /></a>
+                <a href="https://github.com/GrigoryZakharov/todo_api" className="pt-1 text-4xl hover:text-red-500 transform hover:scale-125 transition duration-300 inline-block">
+                  <FaGithub />
+                </a>
               </div>
             </div>
           </div>
