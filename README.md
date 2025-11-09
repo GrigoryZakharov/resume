@@ -1,5 +1,3 @@
-Absolutely! Here's a clean and professional README for your resume project, written in English. I included a project description, live link placeholder, technologies, and instructions to run the project locally. You can replace the placeholders with your actual URL and any additional info.
-
 # Grigory Zakharov | Resume
 
 <img width="1920" height="950" alt="изображение" src="https://github.com/user-attachments/assets/06829d58-f4ea-41df-9f2b-7dbce1432f07" />
