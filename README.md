@@ -11,7 +11,7 @@ This is a personal resume website built using **React** and **Vite**, showcasing
 
 ## 🌐 Live Demo
 
-You can view the live site here: [Your Live Resume URL](https://grigoryzakharov.github.io/resume)  
+You can view the live site here: [Live Resume URL](https://grigoryzakharov.github.io/resume)  
 
 ---
 
