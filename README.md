@@ -97,10 +97,3 @@ The production-ready files will be generated in the `docs` folder, which can be 
 * Email: [zakharov9933@gmail.com](mailto:zakharov9933@gmail.com)
 * GitHub: [GrigoryZakharov](https://github.com/GrigoryZakharov)
 * LinkedIn: [Grigory Zakharov](https://www.linkedin.com/in/grigory-zakharov-577561389/)
-
-```
-
-If you want, I can also **write a shorter, eye-catching README** specifically optimized for GitHub pages, so it looks professional and minimal while still showing your resume and project links.  
-
-Do you want me to do that too?
-```
